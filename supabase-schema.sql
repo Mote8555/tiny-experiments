@@ -74,66 +74,81 @@ ALTER TABLE experiment_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reflections ENABLE ROW LEVEL SECURITY;
 
 -- Profiles: users can read any profile, update their own
-CREATE POLICY IF NOT EXISTS "profiles_select" ON profiles
+DROP POLICY IF EXISTS "profiles_select" ON profiles;
+CREATE POLICY "profiles_select" ON profiles
   FOR SELECT USING (true);
 
-CREATE POLICY IF NOT EXISTS "profiles_update" ON profiles
+DROP POLICY IF EXISTS "profiles_update" ON profiles;
+CREATE POLICY "profiles_update" ON profiles
   FOR UPDATE USING (auth.uid() = id);
 
 -- Experiments: own all; others can see public ones
-CREATE POLICY IF NOT EXISTS "experiments_insert" ON experiments
+DROP POLICY IF EXISTS "experiments_insert" ON experiments;
+CREATE POLICY "experiments_insert" ON experiments
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-CREATE POLICY IF NOT EXISTS "experiments_select_own" ON experiments
+DROP POLICY IF EXISTS "experiments_select_own" ON experiments;
+CREATE POLICY "experiments_select_own" ON experiments
   FOR SELECT USING (auth.uid() = user_id);
 
-CREATE POLICY IF NOT EXISTS "experiments_select_public" ON experiments
+DROP POLICY IF EXISTS "experiments_select_public" ON experiments;
+CREATE POLICY "experiments_select_public" ON experiments
   FOR SELECT USING (is_public = true);
 
-CREATE POLICY IF NOT EXISTS "experiments_update" ON experiments
+DROP POLICY IF EXISTS "experiments_update" ON experiments;
+CREATE POLICY "experiments_update" ON experiments
   FOR UPDATE USING (auth.uid() = user_id);
 
-CREATE POLICY IF NOT EXISTS "experiments_delete" ON experiments
+DROP POLICY IF EXISTS "experiments_delete" ON experiments;
+CREATE POLICY "experiments_delete" ON experiments
   FOR DELETE USING (auth.uid() = user_id);
 
 -- Logs: own via experiment ownership
-CREATE POLICY IF NOT EXISTS "logs_insert" ON experiment_logs
+DROP POLICY IF EXISTS "logs_insert" ON experiment_logs;
+CREATE POLICY "logs_insert" ON experiment_logs
   FOR INSERT WITH CHECK (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND user_id = auth.uid())
   );
 
-CREATE POLICY IF NOT EXISTS "logs_select" ON experiment_logs
+DROP POLICY IF EXISTS "logs_select" ON experiment_logs;
+CREATE POLICY "logs_select" ON experiment_logs
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND (user_id = auth.uid() OR is_public = true))
   );
 
-CREATE POLICY IF NOT EXISTS "logs_update" ON experiment_logs
+DROP POLICY IF EXISTS "logs_update" ON experiment_logs;
+CREATE POLICY "logs_update" ON experiment_logs
   FOR UPDATE USING (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND user_id = auth.uid())
   );
 
-CREATE POLICY IF NOT EXISTS "logs_delete" ON experiment_logs
+DROP POLICY IF EXISTS "logs_delete" ON experiment_logs;
+CREATE POLICY "logs_delete" ON experiment_logs
   FOR DELETE USING (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND user_id = auth.uid())
   );
 
 -- Reflections: own via experiment ownership
-CREATE POLICY IF NOT EXISTS "reflections_insert" ON reflections
+DROP POLICY IF EXISTS "reflections_insert" ON reflections;
+CREATE POLICY "reflections_insert" ON reflections
   FOR INSERT WITH CHECK (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND user_id = auth.uid())
   );
 
-CREATE POLICY IF NOT EXISTS "reflections_select" ON reflections
+DROP POLICY IF EXISTS "reflections_select" ON reflections;
+CREATE POLICY "reflections_select" ON reflections
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND (user_id = auth.uid() OR is_public = true))
   );
 
-CREATE POLICY IF NOT EXISTS "reflections_update" ON reflections
+DROP POLICY IF EXISTS "reflections_update" ON reflections;
+CREATE POLICY "reflections_update" ON reflections
   FOR UPDATE USING (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND user_id = auth.uid())
   );
 
-CREATE POLICY IF NOT EXISTS "reflections_delete" ON reflections
+DROP POLICY IF EXISTS "reflections_delete" ON reflections;
+CREATE POLICY "reflections_delete" ON reflections
   FOR DELETE USING (
     EXISTS (SELECT 1 FROM experiments WHERE id = experiment_id AND user_id = auth.uid())
   );
