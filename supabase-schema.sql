@@ -56,7 +56,7 @@ LANGUAGE plpgsql
 SECURITY DEFINER SET search_path = ''
 AS $$
 BEGIN
-  INSERT INTO profiles (id, email, display_name)
+  INSERT INTO public.profiles (id, email, display_name)
   VALUES (new.id, new.email, split_part(new.email, '@', 1));
   RETURN new;
 END;
