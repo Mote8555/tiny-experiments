@@ -11,7 +11,7 @@ if (existsSync(tmp)) rmSync(tmp, { recursive: true })
 mkdirSync(tmp, { recursive: true })
 
 cpSync(join(root, 'src'), join(tmp, 'src'), { recursive: true })
-cpSync(join(root, '.env'), join(tmp, '.env'))
+if (existsSync(join(root, '.env'))) cpSync(join(root, '.env'), join(tmp, '.env'))
 cpSync(join(root, 'vite.config.js'), join(tmp, 'vite.config.js'))
 cpSync(join(root, 'package.json'), join(tmp, 'package.json'))
 cpSync(join(root, 'index.html'), join(tmp, 'index.html'))
