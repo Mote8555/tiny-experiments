@@ -30,6 +30,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key-here
 ### Email / Password (already on by default)
 
 ### Google OAuth
+
 1. Go to **Authentication → Providers**
 2. Click **Google**
 3. Go to [console.cloud.google.com](https://console.cloud.google.com), create a project
