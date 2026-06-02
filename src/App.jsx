@@ -12,6 +12,7 @@ import ReflectionModal from './components/ReflectionModal'
 import ExperimentDetailModal from './components/ExperimentDetailModal'
 import Onboarding from './components/Onboarding'
 import { exportData } from './utils/helpers'
+import tinyLogo from '../tiny.png'
 
 const SECTIONS = ['dashboard', 'create', 'experiments', 'timeline']
 
@@ -66,7 +67,7 @@ function AppShell() {
     <div>
       <nav className="nav-bar">
         <div className="nav-container">
-          <button className="nav-brand" onClick={() => switchSection('dashboard')}>TINY</button>
+          <button className="nav-brand" onClick={() => switchSection('dashboard')}><img src={tinyLogo} alt="TINY" /></button>
           <div className="nav-links">
             {SECTIONS.map(s => (
               <button
