@@ -62,14 +62,17 @@ export function calculateStreak(logs) {
 }
 
 export function calculateProgress(experiment) {
-  const start = new Date(experiment.createdAt)
+  const start = experiment.startDate ? new Date(experiment.startDate) : new Date(experiment.createdAt)
+  const end = experiment.endDate ? new Date(experiment.endDate) : new Date(start)
+  if (!experiment.endDate) end.setDate(end.getDate() + experiment.duration)
   const now = new Date()
-  const elapsed = Math.max(0, Math.floor((now - start) / (1000 * 60 * 60 * 24)))
-  return Math.min(100, Math.round((elapsed / experiment.duration) * 100))
+  const total = Math.max(1, Math.round((end - start) / (1000 * 60 * 60 * 24)))
+  const elapsed = Math.max(0, Math.round((now - start) / (1000 * 60 * 60 * 24)))
+  return Math.min(100, Math.round((elapsed / total) * 100))
 }
 
 export function currentDay(experiment) {
-  const start = new Date(experiment.createdAt)
+  const start = experiment.startDate ? new Date(experiment.startDate) : new Date(experiment.createdAt)
   const now = new Date()
   const elapsed = Math.max(0, Math.floor((now - start) / (1000 * 60 * 60 * 24))) + 1
   return Math.min(elapsed, experiment.duration)
@@ -77,9 +80,13 @@ export function currentDay(experiment) {
 
 export function isExperimentExpired(experiment) {
   if (experiment.status !== 'active') return false
-  const start = new Date(experiment.createdAt)
-  const end = new Date(start)
-  end.setDate(end.getDate() + experiment.duration)
+  const end = experiment.endDate
+    ? new Date(experiment.endDate)
+    : (() => {
+        const d = new Date(experiment.createdAt)
+        d.setDate(d.getDate() + experiment.duration)
+        return d
+      })()
   return new Date() > end
 }
 

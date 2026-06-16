@@ -8,6 +8,13 @@ function toFrontend(exp, logs, reflection) {
     duration: exp.duration,
     category: exp.category,
     status: exp.status,
+    visibility: exp.visibility || 'private',
+    startDate: exp.start_date,
+    endDate: exp.end_date,
+    currentStreak: exp.current_streak || 0,
+    bestStreak: exp.best_streak || 0,
+    completedAt: exp.completed_at,
+    archivedAt: exp.archived_at,
     createdAt: exp.created_at,
     logs: (logs || []).map(l => ({
       date: l.date,
@@ -62,13 +69,21 @@ export async function fetchExperiments(userId) {
 }
 
 export async function createExperiment(data, userId, id) {
+  const startDate = data.startDate || new Date().toISOString().split('T')[0]
   const insertData = {
     user_id: userId,
     title: data.title,
     hypothesis: data.hypothesis || '',
     duration: data.duration,
     category: data.category || '',
-    status: 'active',
+    status: data.status || 'active',
+    visibility: data.visibility || 'private',
+    start_date: startDate,
+    end_date: data.endDate || (() => {
+      const d = new Date(startDate)
+      d.setDate(d.getDate() + (data.duration || 14))
+      return d.toISOString().split('T')[0]
+    })(),
   }
   if (id) insertData.id = id
 
@@ -161,6 +176,9 @@ export async function restoreExperiment(experiment, userId) {
       hypothesis: experiment.hypothesis,
       duration: experiment.duration,
       category: experiment.category,
+      visibility: experiment.visibility || 'private',
+      startDate: experiment.startDate,
+      status: experiment.status || 'active',
     },
     userId,
     experiment.id
