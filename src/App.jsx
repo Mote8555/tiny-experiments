@@ -15,13 +15,14 @@ import ReflectionModal from "./components/ReflectionModal";
 import ExperimentDetailModal from "./components/ExperimentDetailModal";
 import Onboarding from "./components/Onboarding";
 import { exportData } from "./utils/helpers";
-import tinyLogo from "../tiny.png";
+import tinyLogo from "./tiny.png";
 
 const SECTIONS = ["dashboard", "create", "experiments", "timeline"];
 
 function AppShell() {
   const { state, dispatch, restore } = useExperiments();
   const { currentSection, toast, showOnboarding } = state;
+  const [menuOpen, setMenuOpen] = useState(false);
   const [detailId, setDetailId] = useState(null);
   const [showLogModal, setShowLogModal] = useState(false);
   const [showReflectionModal, setShowReflectionModal] = useState(false);
@@ -38,6 +39,7 @@ function AppShell() {
     function handleKey(e) {
       if (e.key === "Escape") {
         setDetailId(null);
+        setMenuOpen(false);
       }
     }
     window.addEventListener("keydown", handleKey);
@@ -82,16 +84,31 @@ function AppShell() {
         <div className="nav-container">
           <button
             className="nav-brand"
-            onClick={() => switchSection("dashboard")}
+            onClick={() => {
+              switchSection("dashboard");
+              setMenuOpen(false);
+            }}
           >
             <img src={tinyLogo} alt="TINY" />
           </button>
-          <div className="nav-links">
+          <button
+            className={`hamburger ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div className={`nav-links ${menuOpen ? "open" : ""}`}>
             {SECTIONS.map((s) => (
               <button
                 key={s}
                 className={currentSection === s ? "active" : ""}
-                onClick={() => switchSection(s)}
+                onClick={() => {
+                  switchSection(s);
+                  setMenuOpen(false);
+                }}
               >
                 {s === "dashboard"
                   ? "Dashboard"
@@ -104,7 +121,10 @@ function AppShell() {
             ))}
             <button
               className="btn-text"
-              onClick={() => exportData(state.experiments)}
+              onClick={() => {
+                exportData(state.experiments);
+                setMenuOpen(false);
+              }}
               style={{ fontSize: 10, color: "var(--text-muted)" }}
             >
               Export
