@@ -28,6 +28,7 @@ export default function Login({ onSwitch }) {
       await signInWithGoogle()
     } catch (err) {
       setError(err.message)
+    } finally {
       setBusy(false)
     }
   }

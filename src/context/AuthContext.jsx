@@ -13,8 +13,11 @@ export function AuthProvider({ children }) {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null)
+      if (event === 'SIGNED_IN' && window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname)
+      }
     })
 
     return () => subscription.unsubscribe()
@@ -35,10 +38,15 @@ export function AuthProvider({ children }) {
   const signInWithGoogle = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin }
+      options: {
+        redirectTo: window.location.origin,
+        skipBrowserRedirect: true
+      }
     })
     if (error) throw error
-    return data
+    if (data?.url) {
+      window.location.href = data.url
+    }
   }
 
   const signOut = async () => {
