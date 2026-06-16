@@ -18,15 +18,17 @@ function save(data) {
   catch (e) { console.error('Failed to save:', e) }
 }
 
-const initial = {
-  experiments: [],
-  currentSection: 'dashboard',
-  currentExperimentId: null,
-  showOnboarding: !localStorage.getItem(ONBOARDING_KEY),
-  toast: null,
+export function getInitialState() {
+  return {
+    experiments: [],
+    currentSection: 'dashboard',
+    currentExperimentId: null,
+    showOnboarding: !localStorage.getItem(ONBOARDING_KEY),
+    toast: null,
+  }
 }
 
-function reducer(state, action) {
+export function reducer(state, action) {
   switch (action.type) {
     case 'SET_EXPERIMENTS': {
       save(action.payload)
@@ -100,7 +102,7 @@ function reducer(state, action) {
 
 export function ExperimentProvider({ children }) {
   const { user } = useAuth()
-  const [state, dispatch] = useReducer(reducer, initial)
+  const [state, dispatch] = useReducer(reducer, null, getInitialState)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

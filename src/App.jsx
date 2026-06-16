@@ -14,10 +14,10 @@ import LogModal from "./components/LogModal";
 import ReflectionModal from "./components/ReflectionModal";
 import ExperimentDetailModal from "./components/ExperimentDetailModal";
 import Onboarding from "./components/Onboarding";
-import { exportData } from "./utils/helpers";
+import Settings from "./components/Settings";
 import tinyLogo from "./tiny.png";
 
-const SECTIONS = ["dashboard", "create", "experiments", "timeline"];
+const SECTIONS = ["dashboard", "create", "experiments", "timeline", "settings"];
 
 function AppShell() {
   const { state, dispatch, restore } = useExperiments();
@@ -116,19 +116,11 @@ function AppShell() {
                     ? "Design PACT"
                     : s === "experiments"
                       ? "Experiments"
-                      : "Timeline"}
+                      : s === "timeline"
+                        ? "Timeline"
+                        : "Settings"}
               </button>
             ))}
-            <button
-              className="btn-text"
-              onClick={() => {
-                exportData(state.experiments);
-                setMenuOpen(false);
-              }}
-              style={{ fontSize: 10, color: "var(--text-muted)" }}
-            >
-              Export
-            </button>
             <UserNav />
           </div>
         </div>
@@ -176,6 +168,12 @@ function AppShell() {
         className={`section ${currentSection === "timeline" ? "active" : ""}`}
       >
         <Timeline />
+      </section>
+      <section
+        id="section-settings"
+        className={`section ${currentSection === "settings" ? "active" : ""}`}
+      >
+        <Settings switchSection={switchSection} />
       </section>
 
       {showLogModal && <LogModal onClose={closeLogModal} />}
