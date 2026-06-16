@@ -3,7 +3,8 @@ import { useExperiments } from '../context/ExperimentContext'
 
 export default function ReflectionModal({ onClose }) {
   const { state, addReflection } = useExperiments()
-  const { currentExperimentId } = state
+  const { currentExperimentId, experiments } = state
+  const exp = experiments.find(e => e.id === currentExperimentId)
   const [plus, setPlus] = useState('')
   const [minus, setMinus] = useState('')
   const [next, setNext] = useState('')
