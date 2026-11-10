@@ -1,6 +1,15 @@
 # Tiny Experiments — Project Overview
 
-A self-experimentation tracking application based on Anne-Laure Le Cunff's "Tiny Experiments" framework. Users design small, time-boxed behavioral commitments called **PACTs** (Personal, Actionable, Consistent, Time-boxed), log daily observations during the **ACT** phase, and reflect with the **REACT** framework (Plus/Minus/Next) to decide whether to persist, pause, or pivot.
+Tiny Experiments
+A personal growth and self-experimentation application inspired by Anne-Laure Le Cunff's Tiny Experiments philosophy. It helps you turn curiosity into meaningful action through small, intentional experiments called PACTS.
+
+Create PACTs (Personal, Actionable, Consistent, Time-boxed) to explore new habits, ideas and possibilities. 
+
+During the ACT phase, record daily observations, notice patterns and discover what your experiences reveal. At the end of each experiment, use REACT (Plus, Minus, Next) to reflect on your progress and decide whether to persist, pause or pivot.
+
+Instead of chasing a perfect plan,learn through experience and discover your next direction one TINY experiment at a time.
+
+
 
 ---
 
